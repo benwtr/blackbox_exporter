@@ -65,3 +65,7 @@ modules:
       preferred_ip_protocol: ip4
       validate_answer_rrs:
         fail_if_matches_regexp: [test]
+  dns_query_test:
+    prober: dns
+    dns:
+      nameserver: 8.8.8.8

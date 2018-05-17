@@ -92,7 +92,8 @@ type DNSProbe struct {
 	SourceIPAddress     string         `yaml:"source_ip_address,omitempty"`
 	TransportProtocol   string         `yaml:"transport_protocol,omitempty"`
 	QueryName           string         `yaml:"query_name,omitempty"`
-	QueryType           string         `yaml:"query_type,omitempty"`   // Defaults to ANY.
+	QueryType           string         `yaml:"query_type,omitempty"` // Defaults to ANY.
+	Nameserver          string         `yaml:"nameserver,omitempty"`
 	ValidRcodes         []string       `yaml:"valid_rcodes,omitempty"` // Defaults to NOERROR.
 	ValidateAnswer      DNSRRValidator `yaml:"validate_answer_rrs,omitempty"`
 	ValidateAuthority   DNSRRValidator `yaml:"validate_authority_rrs,omitempty"`
@@ -140,8 +141,11 @@ func (s *DNSProbe) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	if err := unmarshal((*plain)(s)); err != nil {
 		return err
 	}
-	if s.QueryName == "" {
-		return errors.New("Query name must be set for DNS module")
+	if s.QueryName == "" || s.Nameserver == "" {
+		return errors.New("Query name or Nameserver must be set for DNS module")
+	}
+	if s.QueryName != "" && s.Nameserver != "" {
+		return errors.New("Query name and Nameserver cannot be set at the same time")
 	}
 	return nil
 }

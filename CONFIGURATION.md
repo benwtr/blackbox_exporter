@@ -133,7 +133,9 @@ tls_config:
 
 [ transport_protocol: <string> | default = "udp" ] # udp, tcp
 
-query_name: <string>
+# query_name OR nameserver MUST be specified and change behavior of the check.
+# query_name configures a record to look up, configuring nameserver will use the target as a record.
+query_name: <string> | nameserver: <string>
 
 [ query_type: <string> | default = "ANY" ]
 
